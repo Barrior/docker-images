@@ -50,6 +50,6 @@ COPY . .
 
 RUN nvm use 9.5 && npm install --production
 
-ENTRYPOINT npm run prod
+ENTRYPOINT pm2 start index.js
 ```
 
