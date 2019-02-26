@@ -48,8 +48,8 @@ WORKDIR /app
 
 COPY . .
 
-RUN nvm use 9.5 && npm install --production
-
-ENTRYPOINT pm2 start index.js
+ENTRYPOINT nvm use 9.5 \
+  && npm install --production \
+  && pm2 start app.js
 ```
 
