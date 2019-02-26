@@ -26,10 +26,13 @@ RUN yum clean all && yum makecache && rpm --rebuilddb \
   && cd $PROGRAM_DIR \
   #
   # 安装 PDF 解析程序
-  && curl -OL https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs926/ghostscript-9.26.tar.gz \
-  && tar -zxvf ghostscript-9.26.tar.gz && cd ghostscript-9.26 \
-  && ./configure && make && make install \
-  && cd $PROGRAM_DIR \
+  # && curl -OL https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs926/ghostscript-9.26.tar.gz \
+  # && tar -zxvf ghostscript-9.26.tar.gz && cd ghostscript-9.26 \
+  # && ./configure && make && make install \
+  # && cd $PROGRAM_DIR \
+  #
+  # 安装 PDF 解析程序
+  && yum install -y ghostscript \
   #
   # 安装图像处理程序 ImageMagick
   # 不采用 RPM 的方式安装，因为 RPM 安装需要依赖 libgs.so.9 等基础库，不好安装。
@@ -45,10 +48,9 @@ RUN yum clean all && yum makecache && rpm --rebuilddb \
   && tar xvf ffmpeg-git-amd64-static.tar.xz && mv ffmpeg-*-static ffmpeg-amd64-static \
   && mv ffmpeg-amd64-static/ffmpeg ffmpeg-amd64-static/ffprobe /usr/local/bin/ \
   #
-  # 移除安装文件和系统临时文件
+  # 移除安装文件
   && cd / \
   && rm -rf /opt/* \
-  && rm -rf /tmp/* \
   #
   # 安装 nvm
   # 官方指南 https://github.com/creationix/nvm
