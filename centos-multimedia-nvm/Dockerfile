@@ -1,7 +1,9 @@
-FROM centos
+FROM centos:latest
 
-# 定义用户安装程序目录
-ENV PROGRAM_DIR /opt
+ARG PROGRAM_DIR=/opt
+ARG NODE_VERSION_LTS=10.15.2
+
+ENV HOME=/root
 
 # 重建 rpm 数据库
 RUN yum clean all && yum makecache && rpm --rebuilddb \
@@ -49,17 +51,23 @@ RUN yum clean all && yum makecache && rpm --rebuilddb \
   && mv ffmpeg-amd64-static/ffmpeg ffmpeg-amd64-static/ffprobe /usr/local/bin/ \
   #
   # 移除安装文件
-  && cd / \
-  && rm -rf /opt/* \
+  && cd / && rm -rf $PROGRAM_DIR/* \
   #
   # 安装 nvm
   # 官方指南 https://github.com/creationix/nvm
   && curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash \
+  #
   # 让 nvm 即时可用
   && export NVM_DIR="$HOME/.nvm" \
   && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" \
   && [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" \
+  #
   # 安装 node 三个版本
-  && nvm install 9.5 && nvm install 10.15 && nvm install 11.9 \
-  # 配置默认使用最新版本的 node
-  && nvm alias default node
+  && nvm install 9.5 && nvm install 11 && nvm install $NODE_VERSION_LTS  \
+  #
+  # 安装和配置默认 pm2
+  && npm i -g pm2 --verbose \
+  && ln -s $HOME/.nvm/versions/node/v$NODE_VERSION_LTS/bin/pm2 /usr/local/bin
+
+ENV NVM_DIR=$HOME/.nvm
+ENV PATH=$NVM_DIR/versions/node/v$NODE_VERSION_LTS/bin:$PATH

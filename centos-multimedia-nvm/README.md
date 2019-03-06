@@ -1,45 +1,34 @@
 ## centos-multimedia-nvm
 
-用于处理图像，PDF，音视频的 `Node.js` 服务端应用程序集成环境。
+A Integration environment of the Node.js application is used to convert images, PDFs, videos, and so on. 
 
-### 系统环境
+### System & Software
 
 ```bash
-CentOS 7.2
+centos latest
 
-# node manager
+# Node Manager
 nvm 0.34
-pm2 3.2.2
+pm2 3.3.1
 
-# word to pdf
+# Included Node versions
+node 9.5.0         # 9.5 stable
+node 10.15.2       # 10.15 stable (default)
+node 11.10.1       # latest version
+
+# Word to PDF
 LibreOffice 5.3
 unoconv 0.6
 
-# image handler
+# Image Handler
 ImageMagick 7.0.8-25
-ghostscript 9.26
+ghostscript 9.07
 
-# audio & video handler
+# Audio & Video Handler
 ffmpeg 4.1
 ```
 
-### Node 版本使用指南
-
-`Node` 版本基于 `nvm` 管理，目前已安装三个版本
-
-```bash
-node 9.5         # 9.5 stable
-node 10.15       # 10.15 stable
-node 11.9        # latest version
-```
-
-在 `Docker` 中使用
-
-```bash
-RUN nvm use 9.5
-```
-
-### Dockerfile 使用示例
+### Usage in Dockerfile
 
 ```bash
 FROM  barrior/centos-multimedia-nvm
@@ -48,8 +37,28 @@ WORKDIR /app
 
 COPY . .
 
-ENTRYPOINT nvm use 9.5 \
+# Simple way to start an application with PM2 3.3.1 and Node 10.15.2 by default.
+# ENTRYPOINT npm i && pm2 start app.js
+
+# Use specific version by nvm that require command `. $NVM_DIR/nvm.sh` before.
+ENTRYPOINT . $NVM_DIR/nvm.sh \
+  && nvm use 9.5 \
   && npm install --production \
   && pm2 start app.js
 ```
 
+### More Examples
+
+```bash
+# node 10.15.2, pm2 3.3.1
+pm2 start app.js
+
+# node 9.5, pm2 3.3.1
+nvm use 9.5 && pm2 start app.js
+
+# node 11, pm2 3.3.1 
+nvm install 11 && pm2 start app.js
+
+# node lts, pm2 latest
+nvm install --lts && npm i -g pm2 && pm2 start app.js
+```
