@@ -38,12 +38,16 @@ WORKDIR /app
 COPY . .
 
 # Simple way to start an application with PM2 3.3.1 and Node 10.15.2 by default.
-# ENTRYPOINT npm i && pm2 start app.js
+# RUN npm install
+# ENTRYPOINT pm2 start app.js
 
 # Use specific version by nvm that require command `. $NVM_DIR/nvm.sh` before.
+RUN . $NVM_DIR/nvm.sh \
+  && nvm use 9.5 \
+  && npm install --production
+
 ENTRYPOINT . $NVM_DIR/nvm.sh \
   && nvm use 9.5 \
-  && npm install --production \
   && pm2 start app.js
 ```
 
