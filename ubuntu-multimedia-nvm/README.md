@@ -1,6 +1,6 @@
 ## ubuntu-multimedia-nvm
 
-A Integration environment of the Node.js application is used to convert images, PDFs, videos, and so on. 
+A Node.js integration environment base on the manager NVM that can also be used to convert images, PDFs, videos, and so on.
 
 ### System & Software
 
