@@ -9,7 +9,7 @@ COPY policy.xml $PROGRAM_DIR
 
 RUN set -x \
   #
-  # 更新源及已安装的包
+  # 更新包索引文件及已安装的包
   && apt-get -y update && apt-get -y upgrade \
   #
   # 安装编译相关（node-gyp需要）
