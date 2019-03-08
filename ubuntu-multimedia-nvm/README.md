@@ -67,3 +67,13 @@ nvm install 11 && pm2 start app.js
 nvm install --lts && npm i -g pm2 && pm2 start app.js
 ```
 
+### Set Timezone
+
+The default timezone is ` Asia/Shanghai `, you can change it as below and view this [list of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) to get your local timezone name of the system.
+
+```bash
+ENV TZ=Etc/UTC
+
+RUN ln -sf /usr/share/zoneinfo/$TZ /etc/localtime \
+  && dpkg-reconfigure -f noninteractive tzdata
+```
