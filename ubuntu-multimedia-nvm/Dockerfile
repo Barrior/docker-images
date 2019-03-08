@@ -4,6 +4,7 @@ ARG PROGRAM_DIR=/opt
 ARG NODE_VERSION_LTS=10.15.2
 
 ENV HOME=/root
+ENV TZ=Asia/Shanghai
 
 COPY policy.xml $PROGRAM_DIR
 
@@ -53,7 +54,12 @@ RUN set -x \
   #
   # 安装和配置默认 pm2
   && npm i -g pm2 --verbose \
-  && ln -s $HOME/.nvm/versions/node/v$NODE_VERSION_LTS/bin/pm2 /usr/local/bin
+  && ln -s $HOME/.nvm/versions/node/v$NODE_VERSION_LTS/bin/pm2 /usr/local/bin \
+  #
+  # 设置时区
+  && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+  && echo $TZ > /etc/timezone \
+  && apt-get install -y tzdata
 
 ENV NVM_DIR=$HOME/.nvm
 ENV PATH=$NVM_DIR/versions/node/v$NODE_VERSION_LTS/bin:$PATH
